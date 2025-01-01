@@ -1,0 +1,151 @@
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <form method="POST">
+    {% csrf_token %}
+    <h2>⚡ LOGIN ⚡</h2>
+    {{ form.as_p }}
+    <button type="submit">LOGIN</button>
+
+    <h3>
+      Dont you have an account?
+      <a href="http://127.0.0.1:8000/signup/">Signup</a>
+    </h3>
+  </form>
+</div>
+<style>
+  /* Google Fonts */
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  }
+
+  form {
+    background: linear-gradient(135deg, #1c1c1c, #2d2d2d);
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8), 0 6px 6px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: glow 1.5s infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 10px #00aaff, 0 0 20px #0077cc, 0 0 30px #005599;
+    }
+    to {
+      box-shadow: 0 0 20px #0077cc, 0 0 40px #005599, 0 0 60px #003366;
+    }
+  }
+
+  h2 {
+    color: #00aaff;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    text-shadow: 0 0 10px #0077cc, 0 0 20px #005599;
+  }
+
+  label {
+    color: #cccccc;
+    font-size: 16px;
+    font-weight: 400;
+    text-shadow: 0 0 10px #0077cc, 0 0 20px #ffffff;
+  }
+
+  input {
+    margin-bottom: 2px;
+    width: 100%;
+    outline: none;
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 300;
+    background: rgba(50, 50, 50, 0.9);
+    color: #ffffff;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  input:focus {
+    background: rgba(50, 50, 50, 1);
+    border-color: #00aaff;
+    box-shadow: 0 0 10px #00aaff, 0 0 20px #0077cc;
+  }
+
+  button {
+    margin: 10px 10px 0 30px;
+    font-size: 18px;
+    color: white;
+    font-weight: 600;
+    width: 80%;
+    height: 40px;
+    cursor: pointer;
+    background: transparent;
+    border: 2px solid #0ef;
+    z-index: 1;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  button::before {
+    content: "";
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 300%;
+    background: linear-gradient(#081b29, #005599, #081b29, #005599);
+    position: absolute;
+    z-index: -1;
+    transition: 0.5s;
+  }
+  button:hover::before {
+    top: 0;
+  }
+  h3 {
+    text-align: center;
+    color: white;
+    font-size: 15px;
+    font-weight: 400;
+    text-decoration: none;
+  }
+  a {
+    text-decoration: none;
+    color: #00aaff;
+    font-weight: 600;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 170, 255, 0.6);
+  }
+  button:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    form {
+      width: 90%;
+    }
+  }
+</style>
+{% endblock content %}
