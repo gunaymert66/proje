@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ses Kaydet ve Tanı</title>
+    {% csrf_token %}
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Roboto", sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #1e2a3a; /* Koyu gece mavisi */
+      color: #ecf0f1; /* Yazı rengini açık tutarak kontrast sağlandı */
+    }
+    h1 {
+      text-align: center;
+      color: white; /* Başlık için açık renk */
+      font-size: 20px;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      border: 4px solid color-mix(in srgb-linear, white 40%, #0056b3 60%);
+      padding: 10px;
+    }
+    h2 {
+      color: #bdc3c7; /* Alt başlık için gri ton */
+      font-size: 28px;
+      margin: 30px;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      height: 50px;
+      background-color: #34495e;
+    }
+    nav span {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: row;
+      text-decoration: none;
+      margin: 15px;
+      color: white;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+      text-transform: capitalize;
+    }
+    .link {
+      display: flex;
+      align-items: center;
+      color: white;
+      font-size: 20px;
+    }
+    .link a {
+      color: white;
+      text-decoration: none;
+      text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+      margin: 0 20px;
+      font-weight: bold;
+    }
+    .link a:hover {
+      color: color-mix(in srgb-linear, white 40%, #0056b3 60%);
+    }
+    nav span a {
+      margin-left: 10px;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    }
+    nav span a:hover {
+      color: #007bff;
+    }
+    .start {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+    }
+
+    .btn {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    button {
+      text-align: center;
+      justify-content: center;
+      font-size: 22px;
+      padding: 1.2em 4.5em;
+      background-color: #007bff; /* Strong blue */
+      border: none;
+      color: white;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      border-radius: 5px;
+      box-shadow: 0 5px 10px rgba(0, 123, 255, 0.4); /* Blue shadow for a pop effect */
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    button::before {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      top: -10px;
+      left: -10px;
+      border-left: 5px solid #007bff;
+      transition: all 0.23s;
+      border-top: 5px solid #007bff;
+    }
+
+    button:hover {
+      background-color: #0056b3; /* Darker blue on hover */
+      transform: translateY(-2px); /* Lift effect */
+    }
+    button::after {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      bottom: -10px;
+      right: -10px;
+      border-right: 5px solid #007bff;
+      border-bottom: 5px solid #007bff;
+      transition: all 0.23s;
+    }
+    button:hover::before {
+      width: 90%;
+      height: 90%;
+    }
+    button:hover::after {
+      width: 90%;
+      height: 90%;
+    }
+    .rec-text {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+    }
+    #status {
+      text-transform: capitalize;
+      margin: 20px;
+      text-align: center;
+      color: darkturquoise;
+      font-size: 22px;
+      font-weight: 500;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.459);
+    }
+    button.loading {
+      background-color: #f39c12; /* Yellow for loading state */
+      pointer-events: none;
+    }
+  </style>
+  <body>
+    <nav>
+      <div class="start">
+        <h1>Voice Command Database Creation</h1>
+        <div class="link">
+          <a href="http://127.0.0.1:8000/voice_record/">Voice Record </a>
+          <a href="http://127.0.0.1:8000/search_and_play_turkish/"
+            >Turkish Search
+          </a>
+          <a href="http://127.0.0.1:8000/search_and_play_english/"
+            >English Search
+          </a>
+        </div>
+      </div>
+
+      <span>
+        {{request.user}}
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <a
+            href="#"
+            onclick="this.closest('form').submit();"
+            class="logout-link"
+            >Oturumu Kapat</a
+          >
+        </form>
+      </span>
+    </nav>
+    <h2>Ses Kaydet ve Tanı</h2>
+    <div class="btn"><button id="start-recording">Ses Kaydet</button></div>
+
+    <p id="status"></p>
+    <div class="rec-text">
+      <p id="recognized-text"></p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#start-recording").click(function () {
+          $("#status").text("Ses kaydediliyor...");
+
+          // AJAX ile backend'e POST isteği gönder
+          $.ajax({
+            url: "{% url 'record_and_recognize' %}", // URL doğru olmalı
+            type: "POST",
+            data: {
+              csrfmiddlewaretoken: "{{ csrf_token }}", // CSRF token'ı buraya ekliyoruz
+            },
+            success: function (response) {
+              if (response.status === "success") {
+                $("#status").text("Kaydın tamamlandığına dair metin:");
+                $("#recognized-text").text(response.text); // Tanınan metni göster
+              } else {
+                $("#status").text("Bir hata oluştu!");
+              }
+            },
+            error: function (xhr, status, error) {
+              $("#status").text("Hata oluştu!");
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
