@@ -286,6 +286,59 @@ def audio_files_to_csv_recursive(folder_path, csv_file_name):
                 writer.writerow([file_name, file_extension, round(file_size, 2), creation_time, file_path])
 
         print(f"Audio files information (including subfolders) has been written to {csv_file_name}")
+import csv
+import sqlite3
+
+# CSV dosyasını veritabanına aktar
+def import_csv_to_db(csv_file_path):
+    # Bağlantıyı her işlem için oluştur
+    conn = sqlite3.connect('files_database.db')
+    cursor = conn.cursor()
+
+    # Mevcut tabloyu sil (varsa)
+    cursor.execute('DROP TABLE IF EXISTS files')
+
+    # Tabloyu yeniden oluştur
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS files (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        file_name TEXT UNIQUE,
+        file_extension TEXT,
+        file_size REAL,
+        creation_date TEXT,
+        file_path TEXT
+    )
+    ''')
+
+    with open(csv_file_path, mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.reader(file, delimiter='\t')  # TSV dosyası için delimiter '\t' kullanılıyor
+        
+        # İlk 6 satırı atlamak
+        for _ in range(6):
+            next(reader)  # İlk 6 satırı atla
+        
+        # CSV dosyasındaki her bir satırı veritabanına ekle
+        for row in reader:
+            # Eğer satırda eksik veri varsa geç
+            if len(row) < 5:
+                print(f"Geçersiz satır (Eksik veri): {row}")
+                continue
+            
+            try:
+                # Dosya adı zaten var mı kontrol et
+                cursor.execute('''
+                INSERT OR IGNORE INTO files (file_name, file_extension, file_size, creation_date, file_path)
+                VALUES (?, ?, ?, ?, ?)
+                ''', (row[0], row[1], float(row[2]), row[3], row[4]))
+                
+            except sqlite3.Error as e:
+                print(f"Hata oluştu: {e}")
+        
+        conn.commit()
+        conn.close()
+
+# CSV dosyasını veritabanına aktar
+import_csv_to_db('C:\\Users\\ibrah\\OneDrive\\Desktop\\softwareLogin\\softwareLogin\\SesDosyalari_TamYolu.tsv')
 
 def record_and_recognize(request):
     if request.method == 'POST':
@@ -313,7 +366,7 @@ def record_and_recognize(request):
             folder_path = "C:\\Users\\ibrah\\OneDrive\\Desktop\\Software"
             csv_file_name = "C:\\Users\\ibrah\\OneDrive\\Desktop\\softwareLogin\\softwareLogin\\SesDosyalari_TamYolu.tsv"
             audio_files_to_csv_recursive(folder_path, csv_file_name)
-
+            import_csv_to_db(csv_file_name)
             return JsonResponse({'status': 'success', 'text': text})
         else:
             return JsonResponse({'status': 'error', 'text': ''})

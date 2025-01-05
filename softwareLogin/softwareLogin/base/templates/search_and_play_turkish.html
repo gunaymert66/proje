@@ -203,9 +203,7 @@
     <!-- Mesajları yalnızca POST işleminden sonra göster -->
     {% if message %}
 
-    <p id="result-message" class="status-message success">
-      {{ result_message }}
-    </p>
+    <p id="result-message" class="status-message">{{ result_message }}</p>
     {% endif %}
 
     <form
@@ -248,9 +246,9 @@
       $(".playButton").click(function () {
         var filePath = $(this).data("file"); // Butondan dosya yolunu al
         $(".status-message")
-          .removeClass("success")
-          .text("Ses çalıyor...")
-          .show();
+          .removeClass("success") // Remove success class to reset status message
+          .text("Ses çalıyor...") // Update text
+          .show(); // Show the status message
 
         // Set the audio source dynamically
         $("#audio-source").attr("src", "/media/" + filePath); // Assuming files are served from /media/
@@ -266,7 +264,9 @@
             file_path: filePath, // Send the file path
           },
           success: function (response) {
-            $(".status-message").addClass("success").text(response.message); // Display server response
+            $(".status-message")
+              .addClass("success") // Add success class if needed
+              .text(response.message); // Display server response
           },
           error: function () {
             $(".status-message").text("Bir hata oluştu.");
