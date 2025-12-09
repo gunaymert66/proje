@@ -1,52 +1,69 @@
-🎤 Voice Command Recording Web App
+🎤 Voice Command Database (Django + AJAX)
 
-Django + JavaScript (AJAX) ile Ses Kaydı Alıp Veritabanına ve Klasöre Kaydeden Web Uygulaması
-
-Bu proje, web tarayıcısı üzerinden ses kaydedip hem klasörde dosya olarak hem de SQLite veritabanında bir kayıt olarak saklamayı amaçlayan bir Django tabanlı web uygulamasıdır.
-Uygulama login/register sistemi içerir ve Türkçe – İngilizce olmak üzere iki farklı ses kayıt bölümü bulunur.
+Bu proje, web tarayıcısı üzerinden alınan ses kayıtlarını AJAX ile Django backend’ine gönderen, kayıtları hem dosya sistemine hem de veritabanına kaydeden bir web uygulamasıdır. Uygulama Türkçe ve İngilizce komut kayıtlarını destekler ve kullanıcı giriş sistemi içerir.
 
 🚀 Özellikler
 
-🎤 Tarayıcıdan ses kaydı (JavaScript + MediaRecorder API)
+Tarayıcıdan ses kaydı alma (MediaRecorder API)
 
-🔁 AJAX ile Django backend’e kayıt gönderme
+AJAX ile asenkron kayıt gönderme
 
-💾 Ses dosyasını sunucudaki klasöre kaydetme
+Kaydedilen ses dosyalarını klasörde saklama
 
-🗂 SQLite veritabanına kayıt ekleme (dosya adı, tarih, dil türü vs.)
+Ses komutu bilgilerini SQLite veritabanında tutma
 
-🔐 Login / Register sistemi (Django Auth)
+TR / EN kayıt sayfaları
 
-🌐 Türkçe & İngilizce ses kayıt sayfaları
+Login / Register kullanıcı sistemi (Django Auth)
 
-📁 Kayıtların admin panelinde görüntülenmesi
+Dinamik klasör oluşturma (tarihe veya dile göre)
 
-📡 Tamamen backend API tabanlı ses kaydı gönderimi
+Admin panelinde kayıtları görüntüleme
 
-📦 Kullanılan Teknolojiler
+🛠️ Teknolojiler
+Alan	Teknoloji
+Backend	Django, Python
+Frontend	HTML, CSS, JavaScript
+API	AJAX, Fetch API
+Database	SQLite
+Audio	MediaRecorder API
+📁 Proje Yapısı (Örnek)
+project/
+│── manage.py
+│── README.md
+│── requirements.txt
+│
+├── app/
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py
+│   ├── templates/
+│   │   ├── record_tr.html
+│   │   └── record_en.html
+│   └── static/
+│       └── js/
+│           └── recorder.js
+│
+└── media/
+    └── recordings/
+        ├── tr/
+        └── en/
 
-Backend:
+🔧 Kurulum Adımları
+1. Depoyu klonlayın
+git clone https://github.com/<username>/<repo>.git
+cd <repo>
 
-Django
+2. Sanal ortam oluşturun
+python -m venv venv
+source venv/bin/activate       # Linux / Mac
+venv\Scripts\activate          # Windows
 
-Django ORM
+3. Gereksinimleri yükleyin
+pip install -r requirements.txt
 
-SQLite3
+4. Migrasyonları uygulayın
+python manage.py migrate
 
-Frontend:
-
-HTML / CSS
-
-JavaScript
-
-MediaRecorder API
-
-AJAX (XMLHttpRequest)
-
-Diğer:
-
-CSRF Token
-
-Static Files
-
-Django Templates
+5. Sunucuyu başlatın
+python manage.py runserver
