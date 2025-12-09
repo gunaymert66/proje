@@ -1,37 +1,52 @@
-🎤 Voice Command Database (Django + AJAX)
+🎤 Voice Command Collector (Django + AJAX)
 
-Bu proje, web tarayıcısı üzerinden alınan ses kayıtlarını AJAX ile Django backend’ine gönderen, kayıtları hem dosya sistemine hem de veritabanına kaydeden bir web uygulamasıdır. Uygulama Türkçe ve İngilizce komut kayıtlarını destekler ve kullanıcı giriş sistemi içerir.
+Bu proje, web tarayıcısından ses kaydı alıp AJAX ile Django sunucusuna gönderen, alınan kaydı hem dosya olarak klasöre hem de veritabanına kaydeden bir web uygulamasıdır.
+Sistem aynı zamanda Türkçe ve İngilizce komut kayıt desteği sunar.
 
 🚀 Özellikler
 
-Tarayıcıdan ses kaydı alma (MediaRecorder API)
+🎙️ Web tarayıcısı üzerinden ses kaydı
 
-AJAX ile asenkron kayıt gönderme
+🔄 AJAX ile asenkron kayıt gönderme
 
-Kaydedilen ses dosyalarını klasörde saklama
+💾 Django backend’de:
 
-Ses komutu bilgilerini SQLite veritabanında tutma
+Ses dosyasını klasöre kaydetme
 
-TR / EN kayıt sayfaları
+SQLite veritabanında kayıt oluşturma
 
-Login / Register kullanıcı sistemi (Django Auth)
+🌍 Türkçe / İngilizce komut kayıt bölümleri
 
-Dinamik klasör oluşturma (tarihe veya dile göre)
+🔐 Login ve Register (İngilizce arayüz)
 
-Admin panelinde kayıtları görüntüleme
+📁 Otomatik klasör oluşturma
 
-🛠️ Teknolojiler
-Alan	Teknoloji
-Backend	Django, Python
-Frontend	HTML, CSS, JavaScript
-API	AJAX, Fetch API
-Database	SQLite
-Audio	MediaRecorder API
-📁 Proje Yapısı (Örnek)
-project/
+🗂️ Admin panelinde kayıtları görüntüleme
+
+🛠️ Kullanılan Teknolojiler
+Backend
+
+Django
+
+SQLite
+
+Python 3.x
+
+Frontend
+
+HTML / CSS
+
+JavaScript
+
+AJAX (fetch / XMLHttpRequest)
+
+Web Audio API (MediaRecorder)
+
+📂 Proje Dizini (Örnek)
+project_root/
 │── manage.py
-│── README.md
 │── requirements.txt
+│── README.md
 │
 ├── app/
 │   ├── models.py
@@ -44,26 +59,26 @@ project/
 │       └── js/
 │           └── recorder.js
 │
-└── media/
-    └── recordings/
-        ├── tr/
-        └── en/
+├── media/
+│   └── recordings/
+│       ├── en/
+│       └── tr/
 
-🔧 Kurulum Adımları
-1. Depoyu klonlayın
-git clone https://github.com/<username>/<repo>.git
-cd <repo>
+🔧 Kurulum
+1. Depoyu klonla
+git clone https://github.com/<username>/<repo-name>.git
+cd <repo-name>
 
-2. Sanal ortam oluşturun
+2. Sanal ortam oluştur
 python -m venv venv
-source venv/bin/activate       # Linux / Mac
-venv\Scripts\activate          # Windows
+source venv/bin/activate     # Linux/Mac
+venv\Scripts\activate        # Windows
 
-3. Gereksinimleri yükleyin
+3. Bağımlılıkları yükle
 pip install -r requirements.txt
 
-4. Migrasyonları uygulayın
+4. Migrasyonları çalıştır
 python manage.py migrate
 
-5. Sunucuyu başlatın
+5. Sunucuyu başlat
 python manage.py runserver
